@@ -33,10 +33,10 @@ LE_decoder=("\"\\xf6\\x49\\x14\\x99"
 "\\x21\\x")
 if startencodepos:
 	diff  = endencodepos-startencodepos
-	diff = format(((diff * 2) + 36),'x')
+	diff = format(((diff * 2) + 36-8),'x')
 	LE_decoder += str(diff)
 	LE_decoder += "\\x23\\x"
-	LE_decoder += str(format((startencodepos+8),'x'))
+	LE_decoder += str(format((startencodepos+6),'x'))
 	
 else:
 	#Register R1 determine number of loops
@@ -49,6 +49,7 @@ LE_decoder+=("\\x46\\x7d\\x58\\xee"
 "\\x46\\xc0\\x33\\x04"
 "\\x39\\x08\\x29\\x24"
 "\\xda\\xf7\"")
+BE_mthumbmode=("\"\\x01\\x10\\x8f\\xe2\\x11\\xff\\x2f\\xe1\"")
 BE_decoder=("\"\\x49\\xf6\\x99\\x14"
 "\\xc9\\xf6\\x99\\x14")
 
@@ -66,7 +67,7 @@ else:
         #Register R1 determine number of loops
         BE_decoder += "\\x4c\\x21"
         #Register R3, Offset for PC
-        BE_decoder += "\\x5c\\x23"
+        BE_decoder += "\\x5a\\x23"
 
 
 
@@ -152,8 +153,13 @@ while badchardetected is True:
 	#Print Decoder Code if encoder is turned on
 	if (encode == True or args['startposition']):
 		print "---------------------------------------------"
+		print "Mthumb code:"
+		print "---------------------------------------------"
+		if args['bigendian']:
+			print BE_mthumbmode
+		print "---------------------------------------------"
 		print "Trying to encode with: " + encoder_default_value
-		print "Encoder code:"
+		print "Decoder code:"
 		print "---------------------------------------------"
 		if args['littleendian']:
 	        	print LE_decoder
